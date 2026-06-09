@@ -5,30 +5,32 @@ const db = require('../database/db')
 /* LISTAR INTERNAÇÕES */
 router.get('/', async (req, res) => {
     try {
+
         const [rows] = await db.query(`
             SELECT
-                i.id,
+                i.*,
                 p.nome AS paciente,
-                p.prontuario,
-                l.numero AS leito,
-                l.setor,
-                i.diagnostico,
-                i.data_entrada,
-                i.data_saida,
-                i.status
+                l.numero AS leito
             FROM internacoes i
-            JOIN pacientes p ON i.paciente_id = p.id
-            JOIN leitos l ON i.leito_id = l.id
-            ORDER BY i.data_entrada DESC
+            LEFT JOIN pacientes p ON i.paciente_id = p.id
+            LEFT JOIN leitos l ON i.leito_id = l.id
+            ORDER BY i.id DESC
         `)
 
         res.json(rows)
+
     } catch (err) {
-        console.error(err)
-        res.status(500).json({ erro: 'Erro ao buscar internações' })
+
+        console.error('ERRO INTERNAÇÕES:', err)
+
+        res.status(500).json({
+            erro: err.message,
+            code: err.code,
+            sqlMessage: err.sqlMessage
+        })
+
     }
 })
-
 /* INTERNAR PACIENTE */
 router.post('/', async (req, res) => {
     const {
