@@ -8,9 +8,15 @@ router.get('/', async (req, res) => {
 
         const [rows] = await db.query(`
             SELECT
-                i.*,
+                i.id,
                 p.nome AS paciente,
-                l.numero AS leito
+                p.prontuario,
+                l.numero AS leito,
+                l.setor,
+                i.status,
+                i.diagnostico,
+                i.data_entrada,
+                i.data_saida
             FROM internacoes i
             LEFT JOIN pacientes p ON i.paciente_id = p.id
             LEFT JOIN leitos l ON i.leito_id = l.id
@@ -20,15 +26,11 @@ router.get('/', async (req, res) => {
         res.json(rows)
 
     } catch (err) {
-
-        console.error('ERRO INTERNAÇÕES:', err)
+        console.error(err)
 
         res.status(500).json({
-            erro: err.message,
-            code: err.code,
-            sqlMessage: err.sqlMessage
+            erro: err.message
         })
-
     }
 })
 /* INTERNAR PACIENTE */
