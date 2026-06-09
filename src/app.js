@@ -15,15 +15,15 @@ const relatoriosRoutes   = require('./routes/relatoriosRoutes')
 const app = express()
 
 const allowedOrigins = process.env.ALLOWED_ORIGINS
-    ? process.env.ALLOWED_ORIGINS.split(',')
-    : [
-        'http://localhost:5500',
-        'http://127.0.0.1:5500',
-        'http://localhost:3000',
-        'http://localhost:5173',
-        'http://localhost:4000'
+  ? process.env.ALLOWED_ORIGINS.split(',')
+  : [
+      'http://localhost:5500',
+      'http://127.0.0.1:5500',
+      'http://localhost:3000',
+      'http://localhost:5173',
+      'http://localhost:4000',
+      'https://hospital-leitos-frontend.vercel.app'
     ]
-
 app.use(cors({
     origin: (origin, callback) => {
         // Permite: sem origin, string "null" (file://), e origens da lista
